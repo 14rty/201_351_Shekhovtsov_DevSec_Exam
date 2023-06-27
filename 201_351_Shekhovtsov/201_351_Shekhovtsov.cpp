@@ -15,7 +15,7 @@ void generateRandomAccounts(int numAccounts) {
         std::string login, password;
         int length = rand() % 5 + 4; // случайная длина строки от 4 до 8 символов
         for (int j = 0; j < length; j++) {
-            login += (char)(rand() % 26 + 'a'); //добавление случайного символа к строке
+            login += (char)(rand() % 26 + 'a'); //добавляем случайные символы к строке
             password += (char)(rand() % 26 + 'a');
         }
         userAccounts.push_back(std::make_pair(login, password));
@@ -24,35 +24,46 @@ void generateRandomAccounts(int numAccounts) {
 
 
 int main() {
-    srand(time(0)); // инициализация генератора псевдослучайных чисел
+    setlocale(LC_ALL, "Russian");
+    srand(time(0)); // инициализируем генератор псевдослучайных чисел
 
-    const std::string correctPinCode = "1234"; //пин-код задается константой в исходном коде
-    generateRandomAccounts(5); // генерация набора пользовательских записей
+    const std::string correctPinCode = "1234";
+    generateRandomAccounts(5); // генерация набора аккаунтов
 
     std::string pinCode;
-    std::cout << "Please enter your pin code: ";
-//    std::cin >> pinCode;
-
-    while ((pinCode = getch()) != '\n') {   // '\n' - код перевода строки
-        std::cout << '*';                  // отображение * вместо введенных символов
+    std::cout << "Введите пик-код: ";
+    
+    char cha;
+    while ((cha = _getch()) != '\r') { // Считывание вводимого пин-кода без отображения в консоли
+        if (cha == '\b') { // Обработка нажатия клавиши Backspace
+            if (pinCode.size() > 0) {
+                pinCode.erase(pinCode.size() - 1);
+                std::cout << "\b \b"; // Удаление последнего символа из консоли
+            }
+        }
+        else {
+            pinCode += cha;
+            std::cout << "*"; // Отображение введенного символа заменяется звездочкой в консоли
+        }
     }
-    std::cout << "\n";
+
 
     if (pinCode == correctPinCode) {
-        std::cout << "Welcome!" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Успех!" << std::endl;
 
         int accountNumber;
         while (true) {
-            std::cout << "Please enter your account number (or -1 to exit): ";
+            std::cout << "Введите номер аккаунта (или -1 для выхода): ";
             std::cin >> accountNumber;
 
             if (accountNumber == -1) {
-                std::cout << "Exiting the application..." << std::endl;
+                std::cout << "Выход..." << std::endl;
                 break;
             }
 
             if (accountNumber < 0 || accountNumber >= userAccounts.size()) {
-                std::cout << "Account not found!" << std::endl;
+                std::cout << "Аккаунт не найден!" << std::endl;
             }
             else {
                 std::cout << "Login: " << userAccounts[accountNumber].first << std::endl;
@@ -61,7 +72,7 @@ int main() {
         }
     }
     else {
-        std::cout << "Incorrect pin code! Exiting the application..." << std::endl;
+        std::cout << "Неверный пин-код! Выход..." << std::endl;
     }
 
     return 0;
