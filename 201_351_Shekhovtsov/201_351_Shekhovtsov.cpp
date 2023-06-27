@@ -25,30 +25,32 @@ void generateRandomAccounts(int numAccounts) {
 
 int main() {
     setlocale(LC_ALL, "Russian");
-    srand(time(0)); // инициализируем генератор псевдослучайных чисел
+
 
     const std::string correctPinCode = "1234";
-    generateRandomAccounts(5); // генерация набора аккаунтов
+
 
     std::string pinCode;
     std::cout << "Введите пик-код: ";
     
     char cha;
-    while ((cha = _getch()) != '\r') { // Считывание вводимого пин-кода без отображения в консоли
-        if (cha == '\b') { // Обработка нажатия клавиши Backspace
+    while ((cha = _getch()) != '\r') { // Считываем ввод из консоли без знаков
+        if (cha == '\b') { // Обработка Backspace
             if (pinCode.size() > 0) {
                 pinCode.erase(pinCode.size() - 1);
-                std::cout << "\b \b"; // Удаление последнего символа из консоли
+                std::cout << "\b \b"; // Удаляем последней символ из консоли
             }
         }
         else {
             pinCode += cha;
-            std::cout << "*"; // Отображение введенного символа заменяется звездочкой в консоли
+            std::cout << "*";
         }
     }
 
 
     if (pinCode == correctPinCode) {
+        srand(time(0)); // генератор псевдослучайных чисел
+        generateRandomAccounts(5); // создаем аккаунты
         std::cout << std::endl;
         std::cout << "Успех!" << std::endl;
 
@@ -72,6 +74,7 @@ int main() {
         }
     }
     else {
+        std::cout << std::endl;
         std::cout << "Неверный пин-код! Выход..." << std::endl;
     }
 
